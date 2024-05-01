@@ -9,7 +9,17 @@ import SwiftUI
 
 struct MainView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        TabView {
+            JourneyView()
+                .tabItem {
+                    Label("Journey", systemImage: "map.circle.fill")
+                }
+            
+            StopListView()
+                .tabItem {
+                    Label("Stops", systemImage: "mappin.and.ellipse.circle.fill")
+                }
+        }
     }
 }
 

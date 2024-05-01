@@ -1,18 +1,25 @@
 //
 //  CountryPickerViewProxy.swift
-//  Journey
+//  CountryPickerSwiftUIExample
 //
-//  Created by Caleb Elson on 4/30/24.
+//  Created by Suryakant Sharma on 25/07/22.
 //
 
+import UIKit
 import SwiftUI
+import CountryPicker
 
-struct CountryPickerViewProxy: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+struct CountryPickerViewProxy: UIViewControllerRepresentable {
+    
+    let onSelect: (( _ chosenCountry: Country) -> Void)?
+    
+    func updateUIViewController(_ uiViewController: UINavigationController, context: Context) {
+        
     }
-}
-
-#Preview {
-    CountryPickerViewProxy()
+    
+    func makeUIViewController(context: Context) -> UINavigationController {
+        UINavigationController(rootViewController: CountryPickerController.create {
+            onSelect?($0)}
+        )
+    }
 }

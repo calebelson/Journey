@@ -11,71 +11,95 @@ import CountryPicker
 
 struct StopView: View {
     @Environment(\.modelContext) private var modelContext
-    @Binding var isPresented: Bool
-    var stop: Stop
-    @State private var selectedCountry: String = ""
-    @State private var fromDate = Date()
-    @State private var toDate = Date()
-    @State private var currentLocation = false
-    @State private var country: Country = CountryManager.shared.currentCountry ?? Country.init(countryCode: "US")
+    @Environment(\.dismiss) var dismiss
+    @Bindable var stop: Stop
+    let isEditing: Bool
     @State private var isShowingCountryPicker = false
-    @State private var cityLabel = ""
     
     var body: some View {
-        //NavigationView {
-        Form {
-            Section(header: Text("Dates")) {
-                Toggle(isOn: $currentLocation, label: {
-                    Text("Current location")
-                })
-                DatePicker("From: ", selection: $fromDate, displayedComponents: .date)
-                DatePicker("To: ", selection: $toDate, displayedComponents: .date)
-                    .disabled(currentLocation)
-            }
+        NavigationView {
             
-            Section(header: Text("Location")) {
-                TextField("City name", text: $cityLabel)
-                Button(country.countryName) {
-                    isShowingCountryPicker = true
-                }.sheet(isPresented: $isShowingCountryPicker) {
-                    CountryPickerViewProxy { chosenCountry in
-                        country = chosenCountry
+            Form {
+                Section(header: Text("Dates")) {
+                    Toggle(isOn: $stop.current, label: {
+                        Text("Current location")
+                    })
+                    DatePicker("From: ", selection: $stop.fromDate, displayedComponents: .date)
+                    if !stop.current {
+                        DatePicker("To: ", selection: $stop.toDate, displayedComponents: .date)
+                            .disabled(stop.current)
+                    }
+                }
+                
+                Section(header: Text("Location")) {
+                    TextField("City name", text: $stop.city)
+                    
+                    Button(action: {
+                        isShowingCountryPicker = true
+                    }, label: {
+                        let country = CountryManager.shared.country(withName: stop.countryName)!
+                        HStack {
+                            Image(uiImage: country.flag ?? UIImage(systemName: "x.circle")!)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(height: 20)
+                            
+                            Text(country.countryName)
+                        }
+                        
+                    }).sheet(isPresented: $isShowingCountryPicker) {
+                        CountryPickerViewProxy { chosenCountry in
+                            stop.countryName = chosenCountry.countryName
+                        }
                     }
                 }
             }
-            Section {
-                Button(action: {}, label: {
-                    if fromDate > toDate && !currentLocation {
-                        Text("Invalid dates")
-                    } else {
-                        Text("Save")
+            .navigationTitle("Stop")
+            .toolbar {
+                if !isEditing {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button("Cancel") {
+                            dismiss()
+                        }
                     }
-                })
+                }
             }
-            .disabled(fromDate > toDate && !currentLocation)
-        }
-        
-        Button(action: {
-            addStop()
-            isPresented = false
             
+        }
+        // Keep save button at the bottom of the screen
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+                    footerView
+                }
+    }
+    
+    var footerView: some View {
+        Button(action: {
+            if isEditing {
+                updateStop()
+            } else {
+                addStop()
+            }
+            
+            dismiss()
         }, label: {
-            if fromDate > toDate && !currentLocation {
+            if stop.fromDate > stop.toDate && !stop.current {
                 Text("Invalid dates")
             } else {
                 Text("Save")
             }
         })
-        .disabled(fromDate > toDate && !currentLocation)
-        //}
+        .disabled(stop.fromDate > stop.toDate && !stop.current)
+    }
+    
+    // TODO: Implement update
+    private func updateStop() {
     }
     
     private func addStop() {
-        let newStop = Stop(fromDate: fromDate, toDate: (currentLocation ? Date() : toDate), countryName: country.countryName, countryFlag: country.flag!.description, city: cityLabel, current: currentLocation)
-        modelContext.insert(newStop)
+        modelContext.insert(stop)
     }
 }
 
 #Preview {
-    StopView(isPresented: .constant(true), stop: Stop(fromDate: Date(), toDate: Date(), countryName: "New Zealand", countryFlag: "New Zealand", city: "Auckland", current: false))
+    StopView(stop: Stop(fromDate: Date(), toDate: Date(), countryName: "New Zealand", city: "", current: false), isEditing: false)
 }
