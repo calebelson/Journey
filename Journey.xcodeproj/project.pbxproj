@@ -45,6 +45,7 @@
 		C98EB61D2BE2106A000D8830 /* StopListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopListView.swift; sourceTree = "<group>"; };
 		C98EB61F2BE2F506000D8830 /* JourneyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneyView.swift; sourceTree = "<group>"; };
 		C98EB6212BE2F615000D8830 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		C98EB6232BE2FAA5000D8830 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		C9B8D58F2BE1C75400A6FC70 /* Journey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Journey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9B8D5922BE1C75400A6FC70 /* JourneyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneyApp.swift; sourceTree = "<group>"; };
 		C9B8D5982BE1C75500A6FC70 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -86,6 +87,7 @@
 		C9B8D5862BE1C75400A6FC70 = {
 			isa = PBXGroup;
 			children = (
+				C98EB6232BE2FAA5000D8830 /* README.md */,
 				C9B8D5912BE1C75400A6FC70 /* Journey */,
 				C9B8D5A42BE1C75500A6FC70 /* JourneyTests */,
 				C9B8D5AE2BE1C75500A6FC70 /* JourneyUITests */,
